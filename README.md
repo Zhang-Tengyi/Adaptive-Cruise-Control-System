@@ -51,7 +51,7 @@ These subsystems are interconnected within Simulink:
 The longitudinal motion of the vehicle is modeled in Simulink using the following physical relation:
 
 **Longitudinal Dynamics Equation:**
-dv/dt = (1/m) * [ Fi − (0.5 * CD * ρ * A * v² + μ * m * g * cosθ + m * g * sinθ) ]
+![Vehicle_Dynamics](Img/vehicle_dynamics.png)
 
 where  
 - Fi: traction force  
@@ -67,7 +67,8 @@ allowing the simulation to reflect realistic driving conditions.
 
 **Simulink Implementation:**
 
-![Vehicle Dynamics Model](Results/VehicleDynamics.png)
+![Vehicle Dynamics Model1](Img/VehicleDynamics1.png)
+![Vehicle Dynamics Model2](Img/VehicleDynamics2.png)
 
 ---
 
@@ -78,7 +79,7 @@ A second PID loop is used to correct steering angle deviation, maintaining vehic
 
 **Simulink Block Diagram:**
 
-![PID Control Diagram](Results/PID_Simulink.png)
+![PID Control Diagram](Img/PID_speed_controller.png)
 
 Performance tuning focused on achieving a compromise between fast response and minimal overshoot.
 
@@ -91,7 +92,7 @@ achieving smoother and more energy-efficient speed transitions under varying roa
 
 **Simulink Block Diagram:**
 
-![LQR Control Diagram](Results/LQR_Simulink.png)
+![LQR Control Diagram](Img/LQR_speed_controller.png)
 
 Compared with PID, the LQR system showed reduced oscillation and smoother acceleration.
 
