@@ -168,17 +168,57 @@ Two initial deviation cases were used to verify system robustness.
 
 ---
 
-## Results
-- **PID Control:** Quick convergence but slightly higher overshoot.  
-- **LQR Control:** Slower response but smoother and more energy-efficient.  
-- **Lane-Centering:** Effective with minimal lateral error (< 0.05 m).  
 
-Simulation verified that **LQR provides superior stability** while **PID offers faster transient response**.
+## Results and Discussion
+
+### PID vs LQR Performance Comparison
+The **PID controller** demonstrated fast response and simplicity in tuning.  
+It reached the target speed quickly but produced a small overshoot before stabilizing.  
+In lane-centering control, PID minimized lateral error effectively and maintained vehicle stability with little oscillation.
+
+The **LQR controller**, on the other hand, provided smoother acceleration and deceleration.  
+By optimizing the balance between state error and control effort, it achieved better energy efficiency and improved comfort,  
+especially when external disturbances such as slope or drag were present.
 
 
 ---
 
-## 🧩 Future Work
-- Integration of **Model Predictive Control (MPC)**.  
-- **Hardware-in-the-Loop (HIL)** implementation.  
-- Unified control for combined longitudinal and lateral dynamics.
+
+### Discussion
+- **Speed Control:**  
+  The PID controller offers rapid convergence suitable for real-time response,  
+  while LQR provides smoother performance for energy-conscious systems.  
+  Each method shows trade-offs between agility and smoothness.
+
+- **Lane-Centering Control:**  
+  The PID lane controller successfully reduced deviation within seconds, maintaining safe and stable alignment.  
+  The use of a state-space lateral model enhanced tuning accuracy and overall performance.
+
+- **Tuning and Parameter Sensitivity:**  
+  PID tuning required multiple iterations to balance response and stability,  
+  whereas LQR provided a more systematic design through matrix weighting adjustment.
+
+
+
+
+---
+
+
+## Future Work
+
+Based on the current simulation outcomes, several directions are planned to enhance the Adaptive Cruise Control (ACC) system:
+
+1. **Model Predictive Control (MPC):**  
+   Implement MPC to further improve speed and lane coordination by predicting future vehicle states and optimizing control inputs in real time.
+
+2. **Hardware-in-the-Loop (HIL) Testing:**  
+   Conduct HIL experiments to validate the controller’s real-time performance and robustness under realistic driving scenarios.
+
+3. **Integrated Longitudinal–Lateral Control:**  
+   Combine speed and lane controllers into a unified framework for smoother transitions between acceleration and steering control.
+
+4. **Sensor Fusion Integration:**  
+   Introduce virtual sensors (camera, radar) to simulate environmental perception and enable adaptive control under dynamic traffic conditions.
+
+5. **Driver Comfort Optimization:**  
+   Refine controller parameters to minimize abrupt acceleration or steering changes and enhance passenger comfort.
