@@ -43,8 +43,6 @@ These subsystems are interconnected within Simulink:
 
 ---
 
----
-
 ## Technical Details
 
 ### Vehicle Dynamics
@@ -73,6 +71,8 @@ allowing the simulation to reflect realistic driving conditions.
 ---
 
 ### PID Control System
+
+#### 1. Speed Control
 The **PID controller** was designed for both longitudinal speed and lateral lane-centering control.  
 It continuously adjusts throttle input based on the speed error between the target and actual velocity.  
 A second PID loop is used to correct steering angle deviation, maintaining vehicle alignment within the lane.
@@ -83,7 +83,21 @@ A second PID loop is used to correct steering angle deviation, maintaining vehic
 
 Performance tuning focused on achieving a compromise between fast response and minimal overshoot.
 
+
+#### 2. Lane-Centering Control
+A second **PID controller** was implemented for **lane-centering**, ensuring lateral stability within the driving lane.  
+The controller receives feedback on lateral deviation and yaw rate, then outputs steering angle corrections to minimize offset from the lane center.  
+A state-space model of the lateral dynamics was used to support parameter tuning and analysis.
+
+**Simulink Block Diagram:**
+
+![Lane Control Diagram](Img/PID_Lane-centering_controller.png)
+
+The lane-centering PID controller demonstrated quick correction of lateral errors and maintained a smooth, stable path with minimal oscillation.
+
+
 ---
+
 
 ### LQR Control System
 An **LQR (Linear Quadratic Regulator)** controller was implemented as an alternative to PID for speed control.  
@@ -100,10 +114,56 @@ Compared with PID, the LQR system showed reduced oscillation and smoother accele
 ---
 
 ## Simulation Setup
-| Condition | Initial Speed | Target Speed | Controller | Result |
-|------------|----------------|---------------|-------------|----------|
-| Flat road | 0 km/h | 100 km/h | PID | Fast response, minor overshoot |
-| Inclined road | 30 km/h | 110 km/h | LQR | Smooth, stable, minimal control effort |
+
+### 1. Speed Control Experiments (PID & LQR)
+
+Two sets of speed-control simulations were conducted in MATLAB/Simulink to evaluate both PID and LQR performance under different initial conditions.
+
+| Case | Controller | Initial Speed | Target Speed | Road Condition | Description |
+|------|-------------|----------------|---------------|----------------|--------------|
+| 1 | PID | 0 km/h | 100 km/h | Flat | Evaluate PID response and overshoot at start-up |
+| 2 | PID | 30 km/h | 110 km/h | Flat | Assess PID tracking accuracy at higher speed |
+| 3 | LQR | 0 km/h | 100 km/h | Flat | Compare LQR stability against PID |
+| 4 | LQR | 30 km/h | 110 km/h | Inclined | Evaluate LQR smoothness under slope disturbance |
+
+Each simulation ran for approximately 20 seconds, using the same longitudinal dynamics model that included aerodynamic drag, rolling resistance, and slope.
+
+**PID Simulation Results:**
+
+- For initial speed **0 → 100 km/h**, the PID controller achieved fast response and minimal steady-state error, with slight overshoot.  
+- For **30 → 110 km/h**, PID maintained accuracy and stability even with increased speed.
+
+![PID Speed Curve 1](Img/PID_Speed_Curve_1.png)
+![PID Speed Curve 2](Img/PID_Speed_Curve_2.png)
+
+**LQR Simulation Results:**
+
+- LQR provided smoother acceleration with less overshoot compared to PID.  
+- The controller maintained stability and optimized control effort under road slope variations.
+
+![LQR Speed Curve 1](Img/LQR_Speed_Curve_1.png)
+![LQR Speed Curve 2](Img/LQR_Speed_Curve_2.png)
+
+---
+
+### 2. Lane-Centering Experiments (PID Only)
+
+For lateral control, an independent **PID lane-centering system** was tested.  
+The controller measured the deviation from the lane center and adjusted the steering angle accordingly.  
+Two initial deviation cases were used to verify system robustness.
+
+| Case | Controller | Initial Speed | Initial Lateral Deviation | Target | Description |
+|------|-------------|----------------|---------------------------|---------|--------------|
+| 1 | PID | 0 km/h | 0.5 m | Center line | Lane-centering correction test |
+| 2 | PID | 30 km/h | 1.0 m | Center line | Evaluate robustness to larger offset |
+
+**Results:**
+
+- The PID controller corrected lane deviation rapidly and maintained lateral stability.  
+- Oscillations were small, and the vehicle quickly converged to the lane center.
+
+![PID Lane Curve 1](Img/PID_Lane_Curve_1.png)
+![PID Lane Curve 2](Img/PID_Lane_Curve_2.png)
 
 
 ---
